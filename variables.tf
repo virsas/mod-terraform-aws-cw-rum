@@ -76,7 +76,7 @@ variable "included_pages" {
   type        = list(string)
   default     = []
 }
-variable "favourite_pages" {
+variable "favorite_pages" {
   description = "List of pages that will be flagged as favourite in the RUM. By default empty list."
   type        = list(string)
   default     = []

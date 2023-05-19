@@ -18,7 +18,7 @@ Terraform module to create Cloudwatch Real User monitoring App
 - **xray_enabled** - If enabled, X Ray will be used to debug the end to end request through all of the AWS services. Defaults to false.
 - **excluded_pages** - List of pages to exclude from monitoring. By default, the list is empty.
 - **included_pages** - List of pages to monitor. If empty, all pages are monitored. By default empty list.
-- **favourite_pages** - List of pages that will be flagged as favourite in the RUM. By default empty list.
+- **favorite_pages** - List of pages that will be flagged as favourite in the RUM. By default empty list.
 - **sample_rate** - Percent of sessions you would like to collect and analyze. 1 is 100%, 0.1 is 10%. By default it is set to 100%.
 
 ## Example

@@ -25,7 +25,7 @@ resource "aws_rum_app_monitor" "vss" {
 
     excluded_pages              = var.excluded_pages
     included_pages              = var.included_pages
-    favourite_pages             = var.favourite_pages
+    favorite_pages             = var.favorite_pages
 
     session_sample_rate         = var.sample_rate
   }
