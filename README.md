@@ -23,12 +23,11 @@ Terraform module to create Cloudwatch Real User monitoring App
 
 ## Example
 
-
-``` terraform
+```terraform
 variable accountID { default = "123456789012"}
 
 module "cw_rum_example_admin_app" {
-  source   = "git::https://github.com/virsas/mod-terraform-aws-cw-rum.git?ref=v1.0.0"
+  source   = "git::https://github.com/virsas/mod-terraform-aws-cw-rum.git?ref=v2.0.0"
 
   profile = "default"
   accountID = var.accountID

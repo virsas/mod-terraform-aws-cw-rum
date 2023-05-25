@@ -7,6 +7,48 @@ provider "aws" {
   }
 }
 
+resource "aws_cognito_identity_pool" "vss" {
+  identity_pool_name               = "RUM-${var.name}"
+  allow_unauthenticated_identities = true
+}
+
+data "aws_iam_policy_document" "trust" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Federated"
+      identifiers = ["cognito-identity.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "cognito-identity.amazonaws.com:aud"
+      values   = [aws_cognito_identity_pool.vss.id]
+    }
+
+    condition {
+      test     = "ForAnyValue:StringLike"
+      variable = "cognito-identity.amazonaws.com:amr"
+      values   = ["unauthenticated"]
+    }
+  }
+}
+
+resource "aws_iam_role" "vss" {
+  name               = "RUM-Cognito-${var.name}"
+  assume_role_policy = data.aws_iam_policy_document.trust.json
+}
+
+resource "aws_cognito_identity_pool_roles_attachment" "vss" {
+  identity_pool_id = aws_cognito_identity_pool.vss.id
+  roles = {
+    "unauthenticated" = aws_iam_role.vss.arn
+  }
+}
+
 resource "aws_rum_app_monitor" "vss" {
   name                          = var.name
   domain                        = var.domain
@@ -28,5 +70,22 @@ resource "aws_rum_app_monitor" "vss" {
     favorite_pages             = var.favorite_pages
 
     session_sample_rate         = var.sample_rate
+
+    identity_pool_id            = aws_cognito_identity_pool.vss.id
+    guest_role_arn              = aws_iam_role.vss.arn
   }
+}
+
+data "aws_iam_policy_document" "permission" {
+  statement {
+    effect = "Allow"
+    actions = "rum:PutRumEvents"
+    resources = aws_rum_app_monitor.vss.arn
+  }
+}
+
+resource "aws_iam_role_policy" "vss" {
+  name   = "RUM-Cognito-Role-${var.name}"
+  role   = aws_iam_role.vss.id
+  policy = data.aws_iam_policy_document.permission.json
 }
