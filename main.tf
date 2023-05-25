@@ -10,6 +10,7 @@ provider "aws" {
 resource "aws_cognito_identity_pool" "vss" {
   identity_pool_name               = "RUM-${var.name}"
   allow_unauthenticated_identities = true
+  allow_classic_flow               = true
 }
 
 data "aws_iam_policy_document" "trust" {
