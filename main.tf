@@ -80,7 +80,7 @@ data "aws_iam_policy_document" "permission" {
   statement {
     effect = "Allow"
     actions = ["rum:PutRumEvents"]
-    resources = aws_rum_app_monitor.vss.arn
+    resources = [aws_rum_app_monitor.vss.arn]
   }
 }
 
